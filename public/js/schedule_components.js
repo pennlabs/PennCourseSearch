@@ -8,6 +8,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var schedGridRef = null;
+
 var SchedGrid = function (_React$Component) {
     _inherits(SchedGrid, _React$Component);
 
@@ -16,17 +18,25 @@ var SchedGrid = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (SchedGrid.__proto__ || Object.getPrototypeOf(SchedGrid)).call(this, props));
 
+        schedGridRef = _this;
         _this.state = { schedBlocks: [], schedLines: [] };
         return _this;
     }
 
     _createClass(SchedGrid, [{
+        key: "updateSchedLines",
+        value: function updateSchedLines(schedLines) {
+            this.setState(function (state) {
+                return { schedLines: schedLines };
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
             var lines = [];
-            //test of schedlines
-            for (var i = 0; i < 10; i++) {
-                lines.push(React.createElement(SchedLine, { key: i, y: i * 10 }));
+            for (var i = 0; i < this.state.schedLines.length; i++) {
+                console.log(this.state.schedLines[i]);
+                lines.push(React.createElement(SchedLine, { key: i, y: this.state.schedLines[i] }));
             }
             return React.createElement(
                 "div",
@@ -38,6 +48,11 @@ var SchedGrid = function (_React$Component) {
 
     return SchedGrid;
 }(React.Component);
+
+var updateSchedLines = function updateSchedLines() {
+    var schedLines = angular.element(document.body).scope().schedlines;
+    schedGridRef.updateSchedLines(schedLines);
+};
 
 var SchedLine = function (_React$Component2) {
     _inherits(SchedLine, _React$Component2);
@@ -54,7 +69,7 @@ var SchedLine = function (_React$Component2) {
     _createClass(SchedLine, [{
         key: "render",
         value: function render() {
-            return React.createElement("hr", { width: "99.7%", className: "schedline", style: { top: this.y + "em" } });
+            return React.createElement("hr", { width: "99.7%", className: "schedline", style: { top: this.y + "%" } });
         }
     }]);
 

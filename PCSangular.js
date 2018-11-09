@@ -480,6 +480,8 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
                     $scope.timeblocks.push(hourtext);
                 }
             }
+            updateSchedLines($scope.schedLines);
+            console.log("executed");
 
             // Define the color map
             var colorMap = {};
