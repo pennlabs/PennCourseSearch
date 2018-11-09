@@ -254,7 +254,7 @@
 					<div id="SchedPlaceholder" ng-hide="schedBlocks.length">
 						<p style="font-size:1.5em;margin-top:7em;display:block;">Search for courses above <br>then click a section's + icon to add it to the schedule.</p><p style="font-size:1em">These are mock schedules.<br> You still need to register for your classes on Penn InTouch.</p>
 					</div>
-					<div id="SchedGrid" ng-show="schedBlocks.length">
+					<div id="SchedGrid_container" ng-show="schedBlocks.length">
 						<hr ng-repeat="thisline in schedlines" width="99.7%" class = "schedline" style="top:{{thisline}}%"></hr>
 						<div ng-repeat="weekday in fullWeekdays" class="DayName" style="width:{{percentWidth}}%;">{{weekday}}</div>
 
@@ -516,9 +516,10 @@
 
 	<!-- Load React. -->
 	<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-	<script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
-	<script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
 	<script type="text/javascript" src="/js/dropdown.js?version=2.0"></script>
+	<script type="text/javascript" src="/js/schedule_components.js?version=2.0"></script>
 </body>
 
 </html>
