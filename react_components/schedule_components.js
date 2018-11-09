@@ -51,12 +51,24 @@ class SchedBlock extends React.Component{
         this.height = props.height;
         this.letterDay = props.letterDay;
         this.topC = props.topC;
+        this.id = props.id;
+        this.assignedClass = props.assignedClass;
+        this.name = props.name;
     }
 
     render(){
-        return <div className = {"SchedBlock_container "+this.letterDay+" "+this.topC}
+        return<div className = {"SchedBlock_container "+this.letterDay+" "+this.topC}
                     style = {{left:this.x+"%",top:this.y+"%",width:this.width+"%",height:this.height+"%"}}>
-        </div>
+                    <div className={"SchedBlock " +this.letterday+" "+ this.topC+" "+this.assignedClass} id = {this.id}
+                         onclick={"angular.element(document.body).scope().clearSearch();"+
+                                  "angular.element(document.body).scope().initiateSearch("+this.assignedClass+", "+"'courseIDSearch');"}>
+                        <div className="CloseX" style="width:100%;height:100%;"><span
+                            onclick="e.stopPropagation(); angular.element(document.body).scope().sched.AddRem(thisBlock.class);">X</span></div>
+                        <div className="NeedAssc"
+                             title="Registration is required for an associated section."><b>!</b></div>
+                        <span className="SecName">{this.name}</span>
+                    </div>
+                </div>
     }
 
 
