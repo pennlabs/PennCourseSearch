@@ -495,6 +495,7 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
             for (var b in meetBlocks) { if (meetBlocks.hasOwnProperty(b)) {
                 $scope.schedBlocks[b] = AddSchedAttr(meetBlocks[b]);
             }}
+            updateSchedBlocks();
 
             for (var weekday in weekdays) { if (weekdays.hasOwnProperty(weekday)) {
                 var dayblocks = $scope.schedBlocks.filter(function(n) {return n.letterday === weekdays[weekday];});

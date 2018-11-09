@@ -31,6 +31,13 @@ var SchedGrid = function (_React$Component) {
             });
         }
     }, {
+        key: "updateSchedBlocks",
+        value: function updateSchedBlocks(schedBlocks) {
+            this.setState(function (state) {
+                return { schedBlocks: schedBlocks };
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
             var lines = [];
@@ -38,8 +45,12 @@ var SchedGrid = function (_React$Component) {
                 lines.push(React.createElement(SchedLine, { key: i, y: this.state.schedLines[i] }));
             }
             var blocks = [];
-            for (var _i = 0; _i < 10; _i++) {
-                blocks.push(React.createElement(SchedBlock, { topC: "green", id: _i, assignedClass: "x", letterDay: "M", key: _i, y: _i * 10, x: 50, width: 10, height: 10, name: "test" }));
+            for (var _i = 0; _i < this.state.schedBlocks.length; _i++) {
+                var block = this.state.schedBlocks[_i];
+                blocks.push(React.createElement(SchedBlock, { topC: block.topC, id: block.id,
+                    assignedClass: block.class, letterDay: block.letterday,
+                    key: _i, y: block.top, x: block.left, width: block.width,
+                    height: block.height, name: block.name }));
             }
             console.log(lines);
             return React.createElement(
@@ -57,6 +68,11 @@ var SchedGrid = function (_React$Component) {
 var updateSchedLines = function updateSchedLines() {
     var schedLines = angular.element(document.body).scope().schedlines;
     schedGridRef.updateSchedLines(schedLines);
+};
+
+var updateSchedBlocks = function updateSchedBlocks() {
+    var schedBlocks = angular.element(document.body).scope().schedBlocks;
+    schedGridRef.updateSchedBlocks(schedBlocks);
 };
 
 var SchedLine = function (_React$Component2) {
@@ -111,14 +127,19 @@ var SchedBlock = function (_React$Component3) {
                 React.createElement(
                     "div",
                     { className: "SchedBlock " + this.letterday + " " + this.topC + " " + this.assignedClass, id: this.id,
-                        onClick: "angular.element(document.body).scope().clearSearch();" + "angular.element(document.body).scope().initiateSearch(" + this.assignedClass + ", " + "'courseIDSearch');" },
+                        onClick: function onClick() {
+                            angular.element(document.body).scope().clearSearch();
+                            angular.element(document.body).scope().initiateSearch(+this.assignedClass, 'courseIDSearch');
+                        } },
                     React.createElement(
                         "div",
                         { className: "CloseX", style: { width: 100 + "%", height: 100 + "%" } },
                         React.createElement(
                             "span",
                             {
-                                onClick: "e.stopPropagation(); angular.element(document.body).scope().sched.AddRem(thisBlock.class);" },
+                                onClick: function onClick() {
+                                    e.stopPropagation();angular.element(document.body).scope().sched.AddRem(thisBlock.class);
+                                } },
                             "X"
                         )
                     ),

@@ -14,14 +14,22 @@ class SchedGrid extends React.Component{
         this.setState(state=>({schedLines: schedLines}));
     }
 
+    updateSchedBlocks(schedBlocks){
+        this.setState(state=>({schedBlocks: schedBlocks}));
+    }
+
     render(){
         let lines = [];
         for(let i = 0; i < this.state.schedLines.length; i++){
             lines.push(<SchedLine key = {i} y = {this.state.schedLines[i]}/>);
         }
         let blocks = [];
-        for(let i = 0; i < 10; i++){
-            blocks.push(<SchedBlock topC={"green"} id ={i} assignedClass={"x"} letterDay={"M"} key = {i} y={i*10} x={50} width ={10} height = {10} name = {"test"}/>);
+        for(let i = 0; i < this.state.schedBlocks.length; i++){
+            const block = this.state.schedBlocks[i];
+            blocks.push(<SchedBlock topC={block.topC} id ={block.id}
+                                    assignedClass={block.class} letterDay={block.letterday}
+                                    key = {i} y={block.top} x={block.left} width ={block.width}
+                                    height = {block.height} name = {block.name}/>);
         }
         console.log(lines);
         return <div id = {"SchedGrid"}>{blocks}{lines}</div>;
@@ -31,6 +39,11 @@ class SchedGrid extends React.Component{
 const updateSchedLines = function(){
     const schedLines = angular.element(document.body).scope().schedlines;
     schedGridRef.updateSchedLines(schedLines);
+};
+
+const updateSchedBlocks = function(){
+    const schedBlocks = angular.element(document.body).scope().schedBlocks;
+    schedGridRef.updateSchedBlocks(schedBlocks);
 };
 
 class SchedLine extends React.Component{
@@ -64,10 +77,10 @@ class SchedBlock extends React.Component{
         return<div className = {"SchedBlock_container "+this.letterDay+" "+this.topC}
                     style = {{left:this.x+"%",top:this.y+"%",width:this.width+"%",height:this.height+"%"}}>
                     <div className={"SchedBlock " +this.letterday+" "+ this.topC+" "+this.assignedClass} id = {this.id}
-                         onClick={"angular.element(document.body).scope().clearSearch();"+
-                                  "angular.element(document.body).scope().initiateSearch("+this.assignedClass+", "+"'courseIDSearch');"}>
+                         onClick={function(){angular.element(document.body).scope().clearSearch();
+                                  angular.element(document.body).scope().initiateSearch(+this.assignedClass, 'courseIDSearch');}}>
                         <div className={"CloseX"} style={{width:100+"%",height:100+"%"}}><span
-                            onClick={"e.stopPropagation(); angular.element(document.body).scope().sched.AddRem(thisBlock.class);"}>X</span></div>
+                            onClick={function(){e.stopPropagation(); angular.element(document.body).scope().sched.AddRem(thisBlock.class);}}>X</span></div>
                         <div className={"NeedAssc"}
                              title={"Registration is required for an associated section."}><b>!</b></div>
                         <span className={"SecName"}>{this.name}</span>
