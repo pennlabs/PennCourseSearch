@@ -26,7 +26,7 @@ class SchedGrid extends React.Component{
         let blocks = [];
         for(let i = 0; i < this.state.schedBlocks.length; i++){
             const block = this.state.schedBlocks[i];
-            blocks.push(<SchedBlock topC={block.topC} id ={block.id}
+            blocks.push(<SchedBlock topC={block.topc} id ={block.id}
                                     assignedClass={block.class} letterDay={block.letterday}
                                     key = {i} y={block.top} x={block.left} width ={block.width}
                                     height = {block.height} name = {block.name}/>);
@@ -74,13 +74,14 @@ class SchedBlock extends React.Component{
     }
 
     render(){
+        const self = this;
         return<div className = {"SchedBlock_container "+this.letterDay+" "+this.topC}
                     style = {{left:this.x+"%",top:this.y+"%",width:this.width+"%",height:this.height+"%"}}>
-                    <div className={"SchedBlock " +this.letterday+" "+ this.topC+" "+this.assignedClass} id = {this.id}
+                    <div className={"SchedBlock " +this.letterDay+" "+ this.topC+" "+this.assignedClass} id = {this.id}
                          onClick={function(){angular.element(document.body).scope().clearSearch();
-                                  angular.element(document.body).scope().initiateSearch(+this.assignedClass, 'courseIDSearch');}}>
+                                  angular.element(document.body).scope().initiateSearch(self.assignedClass, 'courseIDSearch');}}>
                         <div className={"CloseX"} style={{width:100+"%",height:100+"%"}}><span
-                            onClick={function(){e.stopPropagation(); angular.element(document.body).scope().sched.AddRem(thisBlock.class);}}>X</span></div>
+                            onClick={function(){e.stopPropagation(); angular.element(document.body).scope().sched.AddRem(self.assignedClass);}}>X</span></div>
                         <div className={"NeedAssc"}
                              title={"Registration is required for an associated section."}><b>!</b></div>
                         <span className={"SecName"}>{this.name}</span>

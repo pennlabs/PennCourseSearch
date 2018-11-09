@@ -47,7 +47,7 @@ var SchedGrid = function (_React$Component) {
             var blocks = [];
             for (var _i = 0; _i < this.state.schedBlocks.length; _i++) {
                 var block = this.state.schedBlocks[_i];
-                blocks.push(React.createElement(SchedBlock, { topC: block.topC, id: block.id,
+                blocks.push(React.createElement(SchedBlock, { topC: block.topc, id: block.id,
                     assignedClass: block.class, letterDay: block.letterday,
                     key: _i, y: block.top, x: block.left, width: block.width,
                     height: block.height, name: block.name }));
@@ -120,16 +120,17 @@ var SchedBlock = function (_React$Component3) {
     _createClass(SchedBlock, [{
         key: "render",
         value: function render() {
+            var self = this;
             return React.createElement(
                 "div",
                 { className: "SchedBlock_container " + this.letterDay + " " + this.topC,
                     style: { left: this.x + "%", top: this.y + "%", width: this.width + "%", height: this.height + "%" } },
                 React.createElement(
                     "div",
-                    { className: "SchedBlock " + this.letterday + " " + this.topC + " " + this.assignedClass, id: this.id,
+                    { className: "SchedBlock " + this.letterDay + " " + this.topC + " " + this.assignedClass, id: this.id,
                         onClick: function onClick() {
                             angular.element(document.body).scope().clearSearch();
-                            angular.element(document.body).scope().initiateSearch(+this.assignedClass, 'courseIDSearch');
+                            angular.element(document.body).scope().initiateSearch(self.assignedClass, 'courseIDSearch');
                         } },
                     React.createElement(
                         "div",
@@ -138,7 +139,7 @@ var SchedBlock = function (_React$Component3) {
                             "span",
                             {
                                 onClick: function onClick() {
-                                    e.stopPropagation();angular.element(document.body).scope().sched.AddRem(thisBlock.class);
+                                    e.stopPropagation();angular.element(document.body).scope().sched.AddRem(self.assignedClass);
                                 } },
                             "X"
                         )
