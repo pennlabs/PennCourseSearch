@@ -26,13 +26,15 @@ class SchedGrid extends React.Component{
         let blocks = [];
         for(let i = 0; i < this.state.schedBlocks.length; i++){
             const block = this.state.schedBlocks[i];
+            let showWarning = angular.element(document.body).scope().sched.CrossCheck(block.asscsecs);
             blocks.push(<SchedBlock topC={block.topc} id ={block.id}
                                     assignedClass={block.class} letterDay={block.letterday}
                                     key = {i} y={block.top} x={block.left} width ={block.width}
-                                    height = {block.height} name = {block.name}/>);
+                                    height = {block.height} name = {block.name}
+                                    showWarning = {showWarning}/>);
         }
         console.log(lines);
-        return <div id = {"SchedGrid"}>{blocks}{lines}</div>;
+        return <div id = {"SchedGrid"}>{lines}{blocks}</div>;
     }
 }
 
@@ -71,10 +73,16 @@ class SchedBlock extends React.Component{
         this.id = props.id;
         this.assignedClass = props.assignedClass;
         this.name = props.name;
+        this.showWarning = props.showWarning;
     }
 
     render(){
         const self = this;
+        let warning = <div className={"NeedAssc"}
+                           title={"Registration is required for an associated section."}><b>!</b></div>;
+       if(this.showWarning){
+           warning = null;
+       }
         return<div className = {"SchedBlock_container "+this.letterDay+" "+this.topC}
                     style = {{left:this.x+"%",top:this.y+"%",width:this.width+"%",height:this.height+"%"}}>
                     <div className={"SchedBlock " +this.letterDay+" "+ this.topC+" "+this.assignedClass} id = {this.id}
@@ -82,8 +90,7 @@ class SchedBlock extends React.Component{
                                   angular.element(document.body).scope().initiateSearch(self.assignedClass, 'courseIDSearch');}}>
                         <div className={"CloseX"} style={{width:100+"%",height:100+"%"}}><span
                             onClick={function(){e.stopPropagation(); angular.element(document.body).scope().sched.AddRem(self.assignedClass);}}>X</span></div>
-                        <div className={"NeedAssc"}
-                             title={"Registration is required for an associated section."}><b>!</b></div>
+                        {warning}
                         <span className={"SecName"}>{this.name}</span>
                     </div>
                 </div>

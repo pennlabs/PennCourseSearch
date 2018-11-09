@@ -47,17 +47,19 @@ var SchedGrid = function (_React$Component) {
             var blocks = [];
             for (var _i = 0; _i < this.state.schedBlocks.length; _i++) {
                 var block = this.state.schedBlocks[_i];
+                var showWarning = angular.element(document.body).scope().sched.CrossCheck(block.asscsecs);
                 blocks.push(React.createElement(SchedBlock, { topC: block.topc, id: block.id,
                     assignedClass: block.class, letterDay: block.letterday,
                     key: _i, y: block.top, x: block.left, width: block.width,
-                    height: block.height, name: block.name }));
+                    height: block.height, name: block.name,
+                    showWarning: showWarning }));
             }
             console.log(lines);
             return React.createElement(
                 "div",
                 { id: "SchedGrid" },
-                blocks,
-                lines
+                lines,
+                blocks
             );
         }
     }]);
@@ -114,6 +116,7 @@ var SchedBlock = function (_React$Component3) {
         _this3.id = props.id;
         _this3.assignedClass = props.assignedClass;
         _this3.name = props.name;
+        _this3.showWarning = props.showWarning;
         return _this3;
     }
 
@@ -121,6 +124,19 @@ var SchedBlock = function (_React$Component3) {
         key: "render",
         value: function render() {
             var self = this;
+            var warning = React.createElement(
+                "div",
+                { className: "NeedAssc",
+                    title: "Registration is required for an associated section." },
+                React.createElement(
+                    "b",
+                    null,
+                    "!"
+                )
+            );
+            if (this.showWarning) {
+                warning = null;
+            }
             return React.createElement(
                 "div",
                 { className: "SchedBlock_container " + this.letterDay + " " + this.topC,
@@ -144,16 +160,7 @@ var SchedBlock = function (_React$Component3) {
                             "X"
                         )
                     ),
-                    React.createElement(
-                        "div",
-                        { className: "NeedAssc",
-                            title: "Registration is required for an associated section." },
-                        React.createElement(
-                            "b",
-                            null,
-                            "!"
-                        )
-                    ),
+                    warning,
                     React.createElement(
                         "span",
                         { className: "SecName" },
