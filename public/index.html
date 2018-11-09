@@ -255,7 +255,6 @@
 						<p style="font-size:1.5em;margin-top:7em;display:block;">Search for courses above <br>then click a section's + icon to add it to the schedule.</p><p style="font-size:1em">These are mock schedules.<br> You still need to register for your classes on Penn InTouch.</p>
 					</div>
 					<div id="SchedGrid_container" ng-show="schedBlocks.length">
-						<hr ng-repeat="thisline in schedlines" width="99.7%" class = "schedline" style="top:{{thisline}}%"></hr>
 						<div ng-repeat="weekday in fullWeekdays" class="DayName" style="width:{{percentWidth}}%;">{{weekday}}</div>
 
 						<div ng-repeat="thisBlock in schedBlocks"

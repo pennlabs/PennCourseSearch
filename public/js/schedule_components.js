@@ -35,9 +35,9 @@ var SchedGrid = function (_React$Component) {
         value: function render() {
             var lines = [];
             for (var i = 0; i < this.state.schedLines.length; i++) {
-                console.log(this.state.schedLines[i]);
                 lines.push(React.createElement(SchedLine, { key: i, y: this.state.schedLines[i] }));
             }
+            console.log(lines);
             return React.createElement(
                 "div",
                 { id: "SchedGrid" },
@@ -74,6 +74,34 @@ var SchedLine = function (_React$Component2) {
     }]);
 
     return SchedLine;
+}(React.Component);
+
+var SchedBlock = function (_React$Component3) {
+    _inherits(SchedBlock, _React$Component3);
+
+    function SchedBlock(props) {
+        _classCallCheck(this, SchedBlock);
+
+        var _this3 = _possibleConstructorReturn(this, (SchedBlock.__proto__ || Object.getPrototypeOf(SchedBlock)).call(this, props));
+
+        _this3.y = props.y;
+        _this3.x = prop.x;
+        _this3.width = props.width;
+        _this3.height = props.height;
+        _this3.letterDay = props.letterDay;
+        _this3.topC = props.topC;
+        return _this3;
+    }
+
+    _createClass(SchedBlock, [{
+        key: "render",
+        value: function render() {
+            return React.createElement("div", { className: "SchedBlock_container " + this.letterDay + " " + this.topC,
+                style: { left: this.x + "%", top: this.y + "%", width: this.width + "%", height: this.height + "%" } });
+        }
+    }]);
+
+    return SchedBlock;
 }(React.Component);
 
 ReactDOM.render(React.createElement(SchedGrid, null), document.querySelector("#SchedGrid_container"));
