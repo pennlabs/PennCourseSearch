@@ -33,9 +33,11 @@ var SchedGrid = function (_React$Component) {
     }, {
         key: "updateSchedBlocks",
         value: function updateSchedBlocks(schedBlocks) {
-            this.setState(function (state) {
-                return { schedBlocks: schedBlocks };
-            });
+            if (schedBlocks !== null && schedBlocks !== undefined) {
+                this.setState(function (state) {
+                    return { schedBlocks: schedBlocks };
+                });
+            }
         }
     }, {
         key: "render",
@@ -55,24 +57,60 @@ var SchedGrid = function (_React$Component) {
                     showWarning: showWarning }));
             }
             console.log(lines);
-            return React.createElement(
-                "div",
-                { id: "SchedGrid" },
-                lines,
-                blocks
-            );
+            if (blocks.length === 0) {
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        "p",
+                        { style: { fontSize: "1.5em", marginTop: "7em", display: "block" } },
+                        "Search for courses above ",
+                        React.createElement("br", null),
+                        "then click a section's + icon to add it to the schedule."
+                    ),
+                    React.createElement(
+                        "p",
+                        { style: { fontSize: "1em" } },
+                        "These are mock schedules.",
+                        React.createElement("br", null),
+                        "You still need to register for your classes on Penn InTouch."
+                    )
+                );
+            } else {
+                var weekdays = [];
+                var $scope = angular.element(document.body).scope();
+                var weekdayNames = $scope.fullWeekdays;
+                for (var _i2 = 0; _i2 < weekdayNames.length; _i2++) {
+                    var weekday = weekdayNames[_i2];
+                    var label = React.createElement(
+                        "div",
+                        { key: _i2, className: "DayName",
+                            style: { width: $scope.percentWidth + "%" } },
+                        weekday
+                    );
+                    weekdays.push(label);
+                }
+                return React.createElement(
+                    "div",
+                    null,
+                    weekdays,
+                    React.createElement(
+                        "div",
+                        { id: "SchedGrid" },
+                        lines,
+                        blocks
+                    )
+                );
+            }
         }
     }]);
 
     return SchedGrid;
 }(React.Component);
 
-var updateSchedLines = function updateSchedLines() {
+var updateSchedule = function updateSchedule() {
     var schedLines = angular.element(document.body).scope().schedlines;
     schedGridRef.updateSchedLines(schedLines);
-};
-
-var updateSchedBlocks = function updateSchedBlocks() {
     var schedBlocks = angular.element(document.body).scope().schedBlocks;
     schedGridRef.updateSchedBlocks(schedBlocks);
 };
@@ -154,7 +192,7 @@ var SchedBlock = function (_React$Component3) {
                         React.createElement(
                             "span",
                             {
-                                onClick: function onClick() {
+                                onClick: function onClick(e) {
                                     e.stopPropagation();angular.element(document.body).scope().sched.AddRem(self.assignedClass);
                                 } },
                             "X"
@@ -174,4 +212,4 @@ var SchedBlock = function (_React$Component3) {
     return SchedBlock;
 }(React.Component);
 
-ReactDOM.render(React.createElement(SchedGrid, null), document.querySelector("#SchedGrid_container"));
+ReactDOM.render(React.createElement(SchedGrid, null), document.querySelector("#Schedule"));

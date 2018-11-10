@@ -193,6 +193,7 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
 
     $scope.star = {
         AddRem: function(secID) {
+            console.log(secID);
             addrem(secID, $scope.starSections);
             this.Title();
         },
@@ -233,6 +234,7 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
     $scope.sched = {
         AddRem: function(secID, schedname, needloc) {
             secID = FormatID(secID).join('-');
+            console.log(secID);
 
             // schedSections is a continually updated array of sections in the current schedule
             if ($scope.schedSections.indexOf(secID) === -1) { // If the requested section is not scheduled
@@ -466,9 +468,9 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
                     }
                     $scope.schedlines.push(toppos);
                     $scope.timeblocks.push(hourtext);
+                    updateSchedule();
                 }
             }
-            updateSchedLines();
 
 
 
@@ -510,7 +512,6 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
                 $scope.schedBlocks.filter(function(n) {return n.letterday !== weekdays[weekday];});
                 $scope.schedBlocks.concat(dayblocks);
             }}
-
 
 
             function AddSchedAttr(block) {
@@ -567,7 +568,7 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
 
     $scope.$watch('schedData', function() { // When schedData changes
         $scope.schedChange();
-        updateSchedBlocks();
+        updateSchedule();
     }, true);
     $scope.$watch('courseSort', function() {
         if ($scope.courseSort !== 'idDashed') {

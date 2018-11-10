@@ -15,7 +15,9 @@ class SchedGrid extends React.Component{
     }
 
     updateSchedBlocks(schedBlocks){
-        this.setState(state=>({schedBlocks: schedBlocks}));
+        if(schedBlocks !== null && schedBlocks !== undefined) {
+            this.setState(state => ({schedBlocks: schedBlocks}));
+        }
     }
 
     render(){
@@ -34,16 +36,40 @@ class SchedGrid extends React.Component{
                                     showWarning = {showWarning}/>);
         }
         console.log(lines);
-        return <div id = {"SchedGrid"}>{lines}{blocks}</div>;
+        if(blocks.length === 0){
+            return <div>
+                    <p style={{fontSize:"1.5em",marginTop:"7em",display:"block"}}>
+                        Search for courses above <br/>then click a section's + icon to add it to the schedule.
+                    </p>
+                    <p style={{fontSize:"1em"}}>
+                        These are mock schedules.
+                        <br/>
+                        You still need to register for your classes on Penn InTouch.
+                    </p>
+            </div>
+        }else {
+            let weekdays = [];
+            let $scope = angular.element(document.body).scope();
+            const weekdayNames = $scope.fullWeekdays;
+            for(let i = 0; i < weekdayNames.length; i++){
+                var weekday = weekdayNames[i];
+                let label = <div key = {i} className="DayName"
+                                 style={{width:$scope.percentWidth+"%"}}>
+                    {weekday}
+                </div>;
+                weekdays.push(label);
+            }
+            return <div>
+                {weekdays}
+                <div id={"SchedGrid"}>{lines}{blocks}</div>
+            </div>;
+        }
     }
 }
 
-const updateSchedLines = function(){
+const updateSchedule = function(){
     const schedLines = angular.element(document.body).scope().schedlines;
     schedGridRef.updateSchedLines(schedLines);
-};
-
-const updateSchedBlocks = function(){
     const schedBlocks = angular.element(document.body).scope().schedBlocks;
     schedGridRef.updateSchedBlocks(schedBlocks);
 };
@@ -89,7 +115,7 @@ class SchedBlock extends React.Component{
                          onClick={function(){angular.element(document.body).scope().clearSearch();
                                   angular.element(document.body).scope().initiateSearch(self.assignedClass, 'courseIDSearch');}}>
                         <div className={"CloseX"} style={{width:100+"%",height:100+"%"}}><span
-                            onClick={function(){e.stopPropagation(); angular.element(document.body).scope().sched.AddRem(self.assignedClass);}}>X</span></div>
+                            onClick={function(e){e.stopPropagation(); angular.element(document.body).scope().sched.AddRem(self.assignedClass);}}>X</span></div>
                         {warning}
                         <span className={"SecName"}>{this.name}</span>
                     </div>
@@ -99,4 +125,4 @@ class SchedBlock extends React.Component{
 
 }
 
-ReactDOM.render(<SchedGrid/>, document.querySelector("#SchedGrid_container"));
+ReactDOM.render(<SchedGrid/>, document.querySelector("#Schedule"));

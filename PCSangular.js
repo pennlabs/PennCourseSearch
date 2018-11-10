@@ -534,6 +534,9 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
                 }
             }
 
+            updateSchedule();
+
+
             function AddSchedAttr(block) {
                 block.left = weekdays.indexOf(block.letterday) * $scope.percentWidth;
                 block.top = (block.startHr - startHour) * halfScale + 9; // determine top spacing based on time from startHour (offset for prettiness)
