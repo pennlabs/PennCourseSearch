@@ -126,8 +126,10 @@
 							<option value="-revs.QDratio">Good and Easy</option>
 						</select>
 					</div>
+					<div id = "searchResultsContainer">
 
-					<ul>
+					</div>
+					<!--<ul>
 						<li ng-repeat="course in courses | orderBy:courseSort"
 							id="{{ course.idDashed }}"
 							ng-click="get.Sections(course.idDashed)"
@@ -140,21 +142,12 @@
 						(!checkArr[4] || course.courseReqs.indexOf(checkArr[4]) > -1)
 					"
 							ng-hide="(course.courseCred != credFilter) &amp;&amp; (credFilter != 'noFilter')">
-							<!--Dealing with requirements: The list element will be shown if:
-                                There are no requirements (checkArr == [], therefore !checkArr[0] && !checkArr[1])
-                                OR
-                                There is one requirement (checkArr[0] && !checkArr[1]) AND the course's array of reqs fulfilled contains checkArr[0]
-                                OR
-                                There are two requirements (checkArr[0] && checkArr[1]) AND the course's array of reqs fulfilled contains checkArr[0] AND checkArr[1]
-
-                                Also hide the course if it doesn't match the number of credits
-                            -->
 							<span class="PCR Qual" style="background:rgba(45, 160, 240, {{ course.pcrQShade }});color: {{ course.pcrQColor }} ">{{ course.revs.cQT}}</span>
 							<span class="PCR Diff" style="background:rgba(231, 76, 60, {{ course.pcrDShade }});color: {{ course.pcrDColor }} ">{{ course.revs.cDT}}</span>
 							<span class="cID">{{ course.idSpaced }}</span>
 							<span class="cTitle">{{ course.courseTitle }}</span>
 						</li>
-					</ul>
+					</ul>-->
 				</div>
 				<div id="SectionCol" class="box column is-half">
 					<div id="Sections">
@@ -496,6 +489,7 @@
 	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
 	<script type="text/javascript" src="/js/dropdown.js?version=2.0"></script>
 	<script type="text/javascript" src="/js/schedule_components.js?version=2.0"></script>
+	<script type="text/javascript" src="/js/search_components.js?version=2.0"></script>
 </body>
 
 </html>

@@ -74,6 +74,10 @@ const updateSchedule = function(){
     schedGridRef.updateSchedBlocks(schedBlocks);
 };
 
+const refreshSchedule = function(){
+  schedGridRef.forceUpdate()
+};
+
 class SchedLine extends React.Component{
 
     constructor(props){

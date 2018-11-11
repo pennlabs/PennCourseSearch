@@ -74,9 +74,9 @@ var allCourses = require('./loadCourses.js')(currentTerm); // Get array of all c
 var parse = require('./parse.js'); // Load the parsing functions
 var opendata = require('./opendata.js')(95);
 
-var listenPort = 3000;
+var listenPort = 3002;
 if (process.argv[1].includes('beta')) { // If running in the staging environment, run on a different port
-    listenPort = 3001;
+    listenPort = 3003;
 }
 
 // Start the server

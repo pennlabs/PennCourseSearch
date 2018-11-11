@@ -168,7 +168,12 @@ footer:hover i.fa.fa-angle-up::before{
 	text-align: left;
 	margin-right: 1em;
 }
-#CourseList > ul {
+
+#searchResultsContainer{
+	height:100%;
+}
+
+#searchResultsContainer > ul {
 	overflow-y: scroll;
 	height: calc(100% - 2.5em);
 }

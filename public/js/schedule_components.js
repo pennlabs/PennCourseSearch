@@ -115,6 +115,10 @@ var updateSchedule = function updateSchedule() {
     schedGridRef.updateSchedBlocks(schedBlocks);
 };
 
+var refreshSchedule = function refreshSchedule() {
+    schedGridRef.forceUpdate();
+};
+
 var SchedLine = function (_React$Component2) {
     _inherits(SchedLine, _React$Component2);
 

@@ -88,6 +88,7 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
         } else {
             $scope.currentDept = '';
             $scope.courses = [];
+            updateSearchResults();
         }
         if (terms[1].length === 3) {
             $scope.get.Sections(terms[0], terms[1], terms[2]);
@@ -133,8 +134,10 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
             $scope.currentDept = param;
             UpdateCourseList.getDeptCourses(param, type, reqText, pro).then(function (resp) {
                 $scope.courses = PCR(resp.data);
+                updateSearchResults();
                 if (!$scope.courses.length) {
                     $scope.courses = [{ 'courseTitle': 'No Results' }];
+                    updateSearchResults();
                 }
             });
         },

@@ -89,6 +89,7 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
             } else {
                 $scope.currentDept = '';
                 $scope.courses = [];
+                updateSearchResults();
             }
             if(terms[1].length === 3) {
                 $scope.get.Sections(terms[0], terms[1], terms[2]);
@@ -140,8 +141,10 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
             $scope.currentDept = param;
             UpdateCourseList.getDeptCourses(param, type, reqText, pro).then(function(resp) {
                 $scope.courses = PCR(resp.data);
+                updateSearchResults();
                 if (!$scope.courses.length) {
                     $scope.courses = [{'courseTitle': 'No Results'}];
+                    updateSearchResults();
                 }
             });
         },
@@ -271,6 +274,7 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
                 });
                 $scope.schedData[$scope.currentSched].meetings = newData;
             }
+            updateSchedule();
         },
         Download: function() {
             ga('send', 'event', 'Sched', 'downSched');
@@ -497,6 +501,8 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
             for (var b in meetBlocks) { if (meetBlocks.hasOwnProperty(b)) {
                 $scope.schedBlocks[b] = AddSchedAttr(meetBlocks[b]);
             }}
+            refreshSchedule();
+
 
             for (var weekday in weekdays) { if (weekdays.hasOwnProperty(weekday)) {
                 var dayblocks = $scope.schedBlocks.filter(function(n) {return n.letterday === weekdays[weekday];});
@@ -512,6 +518,7 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
                 $scope.schedBlocks.filter(function(n) {return n.letterday !== weekdays[weekday];});
                 $scope.schedBlocks.concat(dayblocks);
             }}
+
 
 
             function AddSchedAttr(block) {
