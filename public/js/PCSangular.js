@@ -578,10 +578,11 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
         updateSchedule();
     }, true);
     $scope.$watch('courseSort', function() {
+        updateSearchResults();
         if ($scope.courseSort !== 'idDashed') {
             ga('send', 'event', 'UI interaction', 'sort', $scope.courseSort);
         }
-        $('#CourseList>ul').scrollTop(0);
+        $('#searchResultsContainer>ul').scrollTop(0);
     });
     $scope.$watch(function() { // If there are any unresolved HTTP requests, show the loading spinner
         return $http.pendingRequests.length;

@@ -13,6 +13,7 @@ class SearchResults extends React.Component{
     }
 
     render(){
+        console.log("Re-rendering");
         let items = [];
         const $scope = angular.element(document.body).scope();
         for(let i = 0; i < this.state.searchResults.length; i++){
@@ -28,12 +29,42 @@ class SearchResults extends React.Component{
             </SearchResult>;
             items.push(searchResultComponent);
         }
-        offset = this.state.searchResults.length;
+        offset += this.state.searchResults.length;
         return <ul>{items}</ul>
     }
 
-    updateSearchResults(results){
-        this.setState(state => ({searchResults: results}));
+    updateSearchResults(oldResults){
+        let new_results = [];
+        oldResults.forEach(item => {new_results.push(item)});
+        let courseSort = angular.element(document.body).scope().courseSort;
+        let tempCourseSort = courseSort.replace("-","");
+        let scale = 1;
+        if(tempCourseSort !== courseSort){
+            scale = -1;
+            courseSort = tempCourseSort;
+        }
+        courseSort = courseSort.replace("revs.","");
+        if(courseSort === "idDashed") {
+            this.setState(state => ({
+                searchResults: new_results.sort((a, b) => {
+                    if (a.idDashed > b.idDashed){
+                        return 1;
+                    }else if (a.idDashed < b.idDashed){
+                        return -1;
+                    }else{
+                        return 0;
+                    }
+                })
+            }));
+            console.log(this.state.searchResults);
+        }else{
+            this.setState(state => ({
+                searchResults: new_results.sort((a, b) => {
+                    return scale * (a.revs[courseSort] - b.revs[courseSort])
+                })
+            }));
+            console.log(this.state.searchResults);
+        }
     }
 
 }
@@ -41,7 +72,6 @@ class SearchResults extends React.Component{
 const updateSearchResults = function(){
     const $scope = angular.element(document.body).scope();
     let results = $scope.courses;
-    console.log(results);
     searchResultsPane.updateSearchResults(results);
 };
 

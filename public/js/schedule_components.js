@@ -56,7 +56,6 @@ var SchedGrid = function (_React$Component) {
                     height: block.height, name: block.name,
                     showWarning: showWarning }));
             }
-            console.log(lines);
             if (blocks.length === 0) {
                 return React.createElement(
                     "div",

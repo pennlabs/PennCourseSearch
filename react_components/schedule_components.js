@@ -35,7 +35,6 @@ class SchedGrid extends React.Component{
                                     height = {block.height} name = {block.name}
                                     showWarning = {showWarning}/>);
         }
-        console.log(lines);
         if(blocks.length === 0){
             return <div>
                     <p style={{fontSize:"1.5em",marginTop:"7em",display:"block"}}>
