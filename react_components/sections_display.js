@@ -1,43 +1,57 @@
 'use strict';
 
 
-class Sections extends React.Component{
+class Sections extends React.Component {
 
 }
 
-class SectionList extends React.Component{
+class SectionList extends React.Component {
 
 }
 
-class SectionInfoDisplay extends React.Component{
-    constructor(props){
+class SectionInfoDisplay extends React.Component {
+    constructor(props) {
         super(props);
         this.sectionInfo = props.sectionInfo;
     }
-    render(){
-        let fullIDDisplay = undefined;
-        if(this.sectionInfo.fullID){
-            fullIDDisplay = <p style={{fontSize:"1.25em"}}>
-                {(this.sectionInfo.fullID + "-" + this.sectionInfo.title)}
 
-                <i style="float:right;margin-right:2rem;color:gold;"
-                   ng-if="sectionInfo.associatedSections !== undefined" className="fa fa-star"
-                   ng-class="{'fa-star': starSections.indexOf(currentSectionDashed) > -1, 'fa-star-o': starSections.indexOf(currentSectionDashed) === -1}"
-                   ng-click="star.AddRem(currentSectionDashed)"></i>
+    render() {
+        let timeInfoDisplay = undefined;
+        if (this.sectionInfo.timeInfo) {
+            let meetings = [];
+            for (let i = 0; i < this.sectionInfo.timeInfo.length; i++) {
+                let meeting = meetings[i];
+                meetings.push(<span key={i}>
+                    {meeting}
+                    <br/>
+                </span>);
+            }
+            timeInfoDisplay = <p style={{display: "block"}}>
+                {meetings}
             </p>;
         }
 
         return <div id="SectionInfo">
-            {fullIDDisplay}
-            <p ng-show="sectionInfo.timeInfo" style="display:block;"><span
-                ng-repeat="meeting in sectionInfo.timeInfo"> {{meeting}} <br></span></p>
-            <p ng-show="sectionInfo.instructor"> {{'Instructor: '+sectionInfo.instructor}} <br><br></p>
-            <!-- <span ng-show="sectionInfo.sectionCred"> {{ sectionInfo.sectionCred }} CU <br><br></span> -->
-            <br ng-if="sectionInfo.associatedSections === undefined"/>
-            <span ng-show="sectionInfo.description">Description: {{sectionInfo.description}} <br><br></span>
-            <span ng-show="sectionInfo.reqsFilled.length">Requirements Fulfilled: <br><span
-                ng-repeat="req in sectionInfo.reqsFilled"> {{req}}<br></span>
-				<br></span>
+            {this.sectionInfo.fullID && <p style={{fontSize: "1.25em"}}>
+                {(this.sectionInfo.fullID + "-" + this.sectionInfo.title)}
+                {(this.sectionInfo.associatedSections !== undefined) &&
+                <i style={{float: "right", marginRight: "2rem", color: "gold"}}
+                   className={"fa fa-star"} onClick={function () {
+                    angular.element(document.body()).scope().AddRem(currentSectionDashed)
+                }
+                }/>}
+            </p>}
+            {timeInfoDisplay}
+            {this.sectionInfo.instructor && <p>
+                {'Instructor: ' + sectionInfo.instructor}
+                <br/>
+                <br/>
+            </p>}
+            {this.sectionInfo.associatedSections && <br/>}
+            {this.sectionInfo.description && <span>Description: {this.sectionInfo.description} <br/><br/></span>}
+            {this.sectionInfo.reqsFilled.length && <span> Requirements Fulfilled: <br><span
+                ng-repeat="req in sectionInfo.reqsFilled"> {{req}}<br/></span>
+				<br/></span>}
             <span ng-show="sectionInfo.prereqs"> Prerequisites: {{sectionInfo.prereqs}} <br><br></span>
             <span
                 ng-show="sectionInfo.associatedType"> You must also sign up for a {{sectionInfo.associatedType}}. <br> Associated {{sectionInfo.associatedType}}s: <br></span>
@@ -48,4 +62,6 @@ class SectionInfoDisplay extends React.Component{
             </ul>
         </div>
     }
+}
+
 }
