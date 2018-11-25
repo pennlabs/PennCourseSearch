@@ -3,77 +3,105 @@
 
 class Sections extends React.Component {
 
+    render() {
+        const $scope = angular.element(document.body).scope();
+        return <div id={"sectionsContainer"}>
+                <div className="columns is-gapless"
+                     style={{marginBottom:"0.6em", overflow:"hidden", textOverflow:"ellipsis", whiteSpace: "nowrap"}}>
+                    <div className={"tooltip column is-one-fifth"} title={"Section status (open or closed)"}>O/C</div>
+                    <div className={"PCR Inst tooltip column is-one-fifth"} title={"Instructor Quality rating"}
+                         style={{background:"rgba(46, 204, 113, 0.85)"}}>
+                        Inst
+                    </div>
+                    <div className={"tooltip column is-one-fifth"} title={"Section ID"}>Sect</div>
+                    <div className={"tooltip column"} title={"Meeting Time"}>Time</div>
+                </div>
+                <div id={"sections"}><SectionList sections={$scope.sections}/></div>
+                <SectionInfoDisplay sectionInfo={$scope.sectionInfo}/>
+        </div>;
+    }
+
 }
 
-class SectionDisplay extends React.Component{
-    constructor(props){
+class SectionDisplay extends React.Component {
+    constructor(props) {
         super(props);
         this.section = this.props.section;
         this.getAddRemoveIcon = this.getAddRemoveIcon.bind(this);
-        this.getClassStatus = this.getClassStatus.bind(this);
         this.getPcaButton = this.getPcaButton.bind(this);
+        this.getInstructorReview = this.getInstructorReview.bind(this);
+        const $scope = angular.element(document.body).scope();
+        this.openSection = function () {
+            $scope.get.SectionInfo(this.section.idDashed);
+        }
     }
 
-    getAddRemoveIcon(){
+    getAddRemoveIcon() {
         let className = "fa";
         const $scope = angular.element(document.body).scope();
         const schedSections = $scope.schedSections;
-        if(schedSections.indexOf(this.section.idDashed) === -1){
+        if (schedSections.indexOf(this.section.idDashed) === -1) {
             className += "fa-plus";
-        }else if (schedSections.indexOf(section.idDashed) > -1){
+        } else if (schedSections.indexOf(section.idDashed) > -1) {
             className += "fa-times";
         }
         const onClick = function () {
-          $scope.sched.addRem(this.section.idDashed);
+            $scope.sched.addRem(this.section.idDashed);
         };
         return <i className={className}
-                  onClick = {onClick}/>;
+                  onClick={onClick}/>;
     }
 
-    getClassStatus(){
+    getPcaButton() {
         const $scope = angular.element(document.body).scope();
-        const onClick = function(){
-            $scope.get.SectionInfo(this.section.idDashed);
-        };
-        return <span className= {"statusClass "+this.section.isOpen?"openSec":"closedSec"}
-              onClick={onClick}/>;
-    }
-
-    getPcaButton(){
-        const $scope = angular.element(document.body).scope();
-        const onClick = function(){
+        const onClick = function () {
             $scope.registerNotify(this.section.idDashed);
         };
         return <i className={"fa fa-bell-o tooltip"}
-           onClick={onClick}
-           title="Penn Course Alert"/>;
+                  onClick={onClick}
+                  title="Penn Course Alert"/>;
     }
 
-    render(){
+    getInstructorReview() {
+        const bgColor = "rgba(46, 204, 113," + this.section.pcrIShade + ")";
+        return <span className={"PCR Inst"}
+                     style={{background: bgColor, color: this.section.pcrIColor}}
+                     onClick={this.openSection}>{this.section.revs.cI}</span>;
+    }
+
+    render() {
+        const $scope = angular.element(document.body).scope();
         return <li
             id={this.section.idDashed}
             className={this.section.actType}>
             <div className={"columns is-gapless"}>
+
                 <div className={"column is-one-fifth"}>
                     {this.getAddRemoveIcon()}
                     <!-- The icon should be a + if the section is not currently scheduled and an x if it is -->
-                    {this.getClassStatus()}
-                        <!-- the status square should be green if the section is open, red if it's closed -->
+                    <span className={"statusClass " + this.section.isOpen ? "openSec" : "closedSec"}
+                          onClick={this.openSection}/>
+                    <!-- the status square should be green if the section is open, red if it's closed -->
                     {(!this.section.isOpen) && this.getPCAButton()}
-                        <!-- If the section is closed, show the notify icon -->
+                    <!-- If the section is closed, show the notify icon -->
                 </div>
+
                 <div className="column is-one-fifth">
-                                <span className="PCR Inst"
-                                      style="background:rgba(46, 204, 113, {{ section.pcrIShade }});color: {{ section.pcrIColor }}"
-                                      ng-click="get.SectionInfo(section.idDashed)">{{section.revs.cI | number:2}}</span>
+                    {this.getInstructorReview()}
                 </div>
-                <div className="column is-one-fifth" style="margin-left:0.4rem; ">
-                                <span className="sectionText"
-                                      ng-click="get.SectionInfo(section.idDashed)">{{justSection(section.idSpaced)}} </span>
+
+                <div className={"column is-one-fifth"} style={{marginLeft: "0.4rem"}}>
+                    <span className="sectionText"
+                          onClick={this.openSection}>
+                        {$scope.justSection(this.section.idSpaced)}
+                    </span>
                 </div>
-                <div className="column">
-                                <span className="sectionText"
-                                      ng-click="get.SectionInfo(section.idDashed)">{{stripTime(section.timeInfo)}} </span>
+
+                <div className={"column"}>
+                    <span className={"sectionText"}
+                          onClick={this.openSection}>
+                        {stripTime(this.section.timeInfo)}
+                    </span>
                 </div>
             </div>
         </li>
@@ -82,17 +110,17 @@ class SectionDisplay extends React.Component{
 
 class SectionList extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.sections = props.sections;
     }
 
-    render(){
+    render() {
         const $scope = angular.element(document.body).scope();
         let sections = [];
-        for(let i = 0; i < this.sections.length; i++){
+        for (let i = 0; i < this.sections.length; i++) {
             let section = this.sections[i];
-            if(($scope.showAct === section.actType || $scope.showAct === 'noFilter') &&
+            if (($scope.showAct === section.actType || $scope.showAct === 'noFilter') &&
                 (section.isOpen || $scope.showClosed) &&
                 ($scope.currentCourse || $scope.starSections.indexOf(section.idDashed) > -1)) {
                 sections.push(<SectionDisplay section={section} key={i}/>);
