@@ -1,23 +1,41 @@
 'use strict';
 
+let sectionsObj = null;
 
 class Sections extends React.Component {
 
-    render() {
+    constructor(props) {
+        super(props);
+        this.state = {sections: undefined, sectionInfo: undefined};
+    }
+
+    updateSections() {
         const $scope = angular.element(document.body).scope();
+        this.setState(state => ({sections: $scope.sections}));
+    }
+
+    updateSectionInfo() {
+        const $scope = angular.element(document.body).scope();
+        this.setState(state => ({sectionInfo: $scope.sectionInfo}));
+    }
+
+    render() {
+        sectionsObj = this;
         return <div id={"sectionsContainer"}>
-                <div className="columns is-gapless"
-                     style={{marginBottom:"0.6em", overflow:"hidden", textOverflow:"ellipsis", whiteSpace: "nowrap"}}>
-                    <div className={"tooltip column is-one-fifth"} title={"Section status (open or closed)"}>O/C</div>
-                    <div className={"PCR Inst tooltip column is-one-fifth"} title={"Instructor Quality rating"}
-                         style={{background:"rgba(46, 204, 113, 0.85)"}}>
-                        Inst
-                    </div>
-                    <div className={"tooltip column is-one-fifth"} title={"Section ID"}>Sect</div>
-                    <div className={"tooltip column"} title={"Meeting Time"}>Time</div>
+            <div className="columns is-gapless"
+                 style={{marginBottom: "0.6em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
+                <div className={"tooltip column is-one-fifth"} title={"Section status (open or closed)"}>O/C</div>
+                <div className={"PCR Inst tooltip column is-one-fifth"} title={"Instructor Quality rating"}
+                     style={{background: "rgba(46, 204, 113, 0.85)"}}>
+                    Inst
                 </div>
-                <div id={"sections"}><SectionList sections={$scope.sections}/></div>
-                <SectionInfoDisplay sectionInfo={$scope.sectionInfo}/>
+                <div className={"tooltip column is-one-fifth"} title={"Section ID"}>Sect</div>
+                <div className={"tooltip column"} title={"Meeting Time"}>Time</div>
+            </div>
+            <div id={"sections"}>
+                {this.state.sections && <SectionList sections={this.state.sections}/>}
+                {this.state.sectionInfo && <SectionInfoDisplay sectionInfo={this.state.sectionInfo}/>}
+            </div>
         </div>;
     }
 
@@ -78,12 +96,9 @@ class SectionDisplay extends React.Component {
 
                 <div className={"column is-one-fifth"}>
                     {this.getAddRemoveIcon()}
-                    <!-- The icon should be a + if the section is not currently scheduled and an x if it is -->
                     <span className={"statusClass " + this.section.isOpen ? "openSec" : "closedSec"}
                           onClick={this.openSection}/>
-                    <!-- the status square should be green if the section is open, red if it's closed -->
                     {(!this.section.isOpen) && this.getPCAButton()}
-                    <!-- If the section is closed, show the notify icon -->
                 </div>
 
                 <div className="column is-one-fifth">
@@ -143,7 +158,7 @@ class SectionInfoDisplay extends React.Component {
     }
 
     render() {
-        const $scope = angular.element(document.body()).scope();
+        const $scope = angular.element(document.body).scope();
         let timeInfoDisplay = undefined;
         if (this.sectionInfo.timeInfo) {
             let meetings = [];
@@ -174,32 +189,36 @@ class SectionInfoDisplay extends React.Component {
         }
 
         let associatedSections = [];
-        for (let i = 0; i < this.sectionInfo.associatedSections.length; i++) {
-            let associatedSection = this.sectionInfo.associatedSections[i];
-            associatedSections.push(<li
-                id={associatedSection.replace(' ', '-').replace(' ', '-')}
-                onClick={function () {
-                    $scope.get.SectionInfo(associatedSections.replace(" ", "-").replace(' ', '-'));
-                }}> {associatedSection} <br/></li>);
+        if(this.sectionInfo.associatedSections) {
+            for (let i = 0; i < this.sectionInfo.associatedSections.length; i++) {
+                let associatedSection = this.sectionInfo.associatedSections[i];
+                associatedSections.push(<li
+                    key = {i}
+                    id={associatedSection.replace(' ', '-').replace(' ', '-')}
+                    onClick={function () {
+                        $scope.get.SectionInfo(associatedSections.replace(" ", "-").replace(' ', '-'));
+                    }}> {associatedSection} <br/></li>);
+            }
+            associatedSections.push(<br key = {this.sectionInfo.associatedSections.length + 1}/>);
         }
 
         return <div id="SectionInfo">
-            {this.sectionInfo.fullID && <p style={{fontSize: "1.25em"}}>
+            {this.sectionInfo.fullID && (<p style={{fontSize: "1.25em"}}>
                 {(this.sectionInfo.fullID + "-" + this.sectionInfo.title)}
-                {(this.sectionInfo.associatedSections !== undefined) &&
+                ({(this.sectionInfo.associatedSections !== undefined) &&
                 <i style={{float: "right", marginRight: "2rem", color: "gold"}}
                    className={"fa fa-star"} onClick={function () {
                     $scope.AddRem(currentSectionDashed)
                 }
-                }/>}
-            </p>}
+                }/>})
+            </p>)}
             {timeInfoDisplay}
             {this.sectionInfo.instructor && <p>
                 {'Instructor: ' + sectionInfo.instructor}
                 <br/>
                 <br/>
             </p>}
-            {this.sectionInfo.associatedSections && <br/>}
+            {this.sectionInfo.associatedSections && associatedSections}
             {this.sectionInfo.description && <span>Description: {this.sectionInfo.description} <br/><br/></span>}
             {requirementsDisplay}
             {this.sectionInfo.prereqs && <span> Prerequisites: {this.sectionInfo.prereqs} <br/><br/></span>}
@@ -211,3 +230,6 @@ class SectionInfoDisplay extends React.Component {
         </div>
     }
 }
+
+
+ReactDOM.render(<Sections/>, document.querySelector("#SectionCol"));
