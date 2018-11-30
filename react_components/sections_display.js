@@ -35,8 +35,8 @@ class Sections extends React.Component {
                 <div className={"tooltip column"} title={"Meeting Time"}>Time</div>
             </div>
             <div id={"sections"}>
-                {this.state.sections && <SectionList sections={this.state.sections}/>}
-                {this.state.sectionInfo && <SectionInfoDisplay key = {this.iteration} sectionInfo={this.state.sectionInfo}/>}
+                {this.state.sections && <SectionList key = {this.iteration} sections={this.state.sections}/>}
+                {this.state.sectionInfo && <SectionInfoDisplay key = {this.iteration + 1} sectionInfo={this.state.sectionInfo}/>}
             </div>
         </div>;
     }
@@ -51,8 +51,9 @@ class SectionDisplay extends React.Component {
         this.getPcaButton = this.getPcaButton.bind(this);
         this.getInstructorReview = this.getInstructorReview.bind(this);
         const $scope = angular.element(document.body).scope();
+        const self = this;
         this.openSection = function () {
-            $scope.get.SectionInfo(this.section.idDashed);
+            $scope.get.SectionInfo(self.section.idDashed);
         }
     }
 
@@ -100,7 +101,7 @@ class SectionDisplay extends React.Component {
                     {this.getAddRemoveIcon()}
                     <span className={"statusClass " + this.section.isOpen ? "openSec" : "closedSec"}
                           onClick={this.openSection}/>
-                    {(!this.section.isOpen) && this.getPCAButton()}
+                    {(!this.section.isOpen) && this.getPcaButton()}
                 </div>
 
                 <div className="column is-one-fifth">
@@ -117,7 +118,7 @@ class SectionDisplay extends React.Component {
                 <div className={"column"}>
                     <span className={"sectionText"}
                           onClick={this.openSection}>
-                        {stripTime(this.section.timeInfo)}
+                        {$scope.stripTime(this.section.timeInfo)}
                     </span>
                 </div>
             </div>

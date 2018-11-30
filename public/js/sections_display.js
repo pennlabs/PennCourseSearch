@@ -76,8 +76,8 @@ var Sections = function (_React$Component) {
                 React.createElement(
                     "div",
                     { id: "sections" },
-                    this.state.sections && React.createElement(SectionList, { sections: this.state.sections }),
-                    this.state.sectionInfo && React.createElement(SectionInfoDisplay, { key: this.iteration, sectionInfo: this.state.sectionInfo })
+                    this.state.sections && React.createElement(SectionList, { key: this.iteration, sections: this.state.sections }),
+                    this.state.sectionInfo && React.createElement(SectionInfoDisplay, { key: this.iteration + 1, sectionInfo: this.state.sectionInfo })
                 )
             );
         }
@@ -99,8 +99,9 @@ var SectionDisplay = function (_React$Component2) {
         _this2.getPcaButton = _this2.getPcaButton.bind(_this2);
         _this2.getInstructorReview = _this2.getInstructorReview.bind(_this2);
         var $scope = angular.element(document.body).scope();
+        var self = _this2;
         _this2.openSection = function () {
-            $scope.get.SectionInfo(this.section.idDashed);
+            $scope.get.SectionInfo(self.section.idDashed);
         };
         return _this2;
     }
@@ -163,7 +164,7 @@ var SectionDisplay = function (_React$Component2) {
                         this.getAddRemoveIcon(),
                         React.createElement("span", { className: "statusClass " + this.section.isOpen ? "openSec" : "closedSec",
                             onClick: this.openSection }),
-                        !this.section.isOpen && this.getPCAButton()
+                        !this.section.isOpen && this.getPcaButton()
                     ),
                     React.createElement(
                         "div",
@@ -187,7 +188,7 @@ var SectionDisplay = function (_React$Component2) {
                             "span",
                             { className: "sectionText",
                                 onClick: this.openSection },
-                            stripTime(this.section.timeInfo)
+                            $scope.stripTime(this.section.timeInfo)
                         )
                     )
                 )
