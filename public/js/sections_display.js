@@ -19,6 +19,7 @@ var Sections = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Sections.__proto__ || Object.getPrototypeOf(Sections)).call(this, props));
 
         _this.state = { sections: undefined, sectionInfo: undefined };
+        _this.iteration = 0;
         return _this;
     }
 
@@ -41,6 +42,7 @@ var Sections = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
+            this.iteration++;
             sectionsObj = this;
             return React.createElement(
                 "div",
@@ -75,7 +77,7 @@ var Sections = function (_React$Component) {
                     "div",
                     { id: "sections" },
                     this.state.sections && React.createElement(SectionList, { sections: this.state.sections }),
-                    this.state.sectionInfo && React.createElement(SectionInfoDisplay, { sectionInfo: this.state.sectionInfo })
+                    this.state.sectionInfo && React.createElement(SectionInfoDisplay, { key: this.iteration, sectionInfo: this.state.sectionInfo })
                 )
             );
         }
@@ -243,18 +245,19 @@ var SectionInfoDisplay = function (_React$Component4) {
 
         var _this4 = _possibleConstructorReturn(this, (SectionInfoDisplay.__proto__ || Object.getPrototypeOf(SectionInfoDisplay)).call(this, props));
 
-        _this4.sectionInfo = props.sectionInfo;
+        _this4.state = { sectionInfo: _this4.props.sectionInfo };
         return _this4;
     }
 
     _createClass(SectionInfoDisplay, [{
         key: "render",
         value: function render() {
+            console.log("Rendering section info");
             var $scope = angular.element(document.body).scope();
             var timeInfoDisplay = undefined;
-            if (this.sectionInfo.timeInfo) {
+            if (this.state.sectionInfo.timeInfo) {
                 var meetings = [];
-                for (var i = 0; i < this.sectionInfo.timeInfo.length; i++) {
+                for (var i = 0; i < this.state.sectionInfo.timeInfo.length; i++) {
                     var meeting = meetings[i];
                     meetings.push(React.createElement(
                         "span",
@@ -271,10 +274,10 @@ var SectionInfoDisplay = function (_React$Component4) {
             }
 
             var requirementsDisplay = undefined;
-            if (this.sectionInfo.reqsFilled) {
+            if (this.state.sectionInfo.reqsFilled) {
                 var reqs = [];
-                for (var _i = 0; _i < this.sectionInfo.reqsFilled.length; _i++) {
-                    var req = this.sectionInfo.reqsFilled[_i];
+                for (var _i = 0; _i < this.state.sectionInfo.reqsFilled.length; _i++) {
+                    var req = this.state.sectionInfo.reqsFilled[_i];
                     reqs.push(React.createElement(
                         "span",
                         { key: _i },
@@ -293,9 +296,9 @@ var SectionInfoDisplay = function (_React$Component4) {
             }
 
             var associatedSections = [];
-            if (this.sectionInfo.associatedSections) {
-                for (var _i2 = 0; _i2 < this.sectionInfo.associatedSections.length; _i2++) {
-                    var associatedSection = this.sectionInfo.associatedSections[_i2];
+            if (this.state.sectionInfo.associatedSections) {
+                for (var _i2 = 0; _i2 < this.state.sectionInfo.associatedSections.length; _i2++) {
+                    var associatedSection = this.state.sectionInfo.associatedSections[_i2];
                     associatedSections.push(React.createElement(
                         "li",
                         {
@@ -310,60 +313,58 @@ var SectionInfoDisplay = function (_React$Component4) {
                         React.createElement("br", null)
                     ));
                 }
-                associatedSections.push(React.createElement("br", { key: this.sectionInfo.associatedSections.length + 1 }));
+                associatedSections.push(React.createElement("br", { key: this.state.sectionInfo.associatedSections.length + 1 }));
             }
 
             return React.createElement(
                 "div",
                 { id: "SectionInfo" },
-                this.sectionInfo.fullID && React.createElement(
+                this.state.sectionInfo.fullID && React.createElement(
                     "p",
                     { style: { fontSize: "1.25em" } },
-                    this.sectionInfo.fullID + "-" + this.sectionInfo.title,
-                    "(",
-                    this.sectionInfo.associatedSections !== undefined && React.createElement("i", { style: { float: "right", marginRight: "2rem", color: "gold" },
+                    this.state.sectionInfo.fullID + "-" + this.state.sectionInfo.title,
+                    this.state.sectionInfo.associatedSections !== undefined && React.createElement("i", { style: { float: "right", marginRight: "2rem", color: "gold" },
                         className: "fa fa-star", onClick: function onClick() {
                             $scope.AddRem(currentSectionDashed);
-                        } }),
-                    ")"
+                        } })
                 ),
                 timeInfoDisplay,
-                this.sectionInfo.instructor && React.createElement(
+                this.state.sectionInfo.instructor && React.createElement(
                     "p",
                     null,
-                    'Instructor: ' + sectionInfo.instructor,
+                    'Instructor: ' + this.state.sectionInfo.instructor,
                     React.createElement("br", null),
                     React.createElement("br", null)
                 ),
-                this.sectionInfo.associatedSections && associatedSections,
-                this.sectionInfo.description && React.createElement(
+                this.state.sectionInfo.associatedSections && associatedSections,
+                this.state.sectionInfo.description && React.createElement(
                     "span",
                     null,
                     "Description: ",
-                    this.sectionInfo.description,
+                    this.state.sectionInfo.description,
                     " ",
                     React.createElement("br", null),
                     React.createElement("br", null)
                 ),
                 requirementsDisplay,
-                this.sectionInfo.prereqs && React.createElement(
+                this.state.sectionInfo.prereqs && React.createElement(
                     "span",
                     null,
                     " Prerequisites: ",
-                    this.sectionInfo.prereqs,
+                    this.state.sectionInfo.prereqs,
                     " ",
                     React.createElement("br", null),
                     React.createElement("br", null)
                 ),
-                this.sectionInfo.associatedType && React.createElement(
+                this.state.sectionInfo.associatedType && React.createElement(
                     "span",
                     null,
                     " You must also sign up for a ",
-                    this.sectionInfo.associatedType,
+                    this.state.sectionInfo.associatedType,
                     ". ",
                     React.createElement("br", null),
                     " Associated ",
-                    this.sectionInfo.associatedType,
+                    this.state.sectionInfo.associatedType,
                     "s: ",
                     React.createElement("br", null)
                 ),

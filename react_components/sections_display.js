@@ -7,6 +7,7 @@ class Sections extends React.Component {
     constructor(props) {
         super(props);
         this.state = {sections: undefined, sectionInfo: undefined};
+        this.iteration = 0;
     }
 
     updateSections() {
@@ -20,6 +21,7 @@ class Sections extends React.Component {
     }
 
     render() {
+        this.iteration++;
         sectionsObj = this;
         return <div id={"sectionsContainer"}>
             <div className="columns is-gapless"
@@ -34,7 +36,7 @@ class Sections extends React.Component {
             </div>
             <div id={"sections"}>
                 {this.state.sections && <SectionList sections={this.state.sections}/>}
-                {this.state.sectionInfo && <SectionInfoDisplay sectionInfo={this.state.sectionInfo}/>}
+                {this.state.sectionInfo && <SectionInfoDisplay key = {this.iteration} sectionInfo={this.state.sectionInfo}/>}
             </div>
         </div>;
     }
@@ -154,15 +156,16 @@ class SectionList extends React.Component {
 class SectionInfoDisplay extends React.Component {
     constructor(props) {
         super(props);
-        this.sectionInfo = props.sectionInfo;
+        this.state = {sectionInfo: this.props.sectionInfo};
     }
 
     render() {
+        console.log("Rendering section info");
         const $scope = angular.element(document.body).scope();
         let timeInfoDisplay = undefined;
-        if (this.sectionInfo.timeInfo) {
+        if (this.state.sectionInfo.timeInfo) {
             let meetings = [];
-            for (let i = 0; i < this.sectionInfo.timeInfo.length; i++) {
+            for (let i = 0; i < this.state.sectionInfo.timeInfo.length; i++) {
                 let meeting = meetings[i];
                 meetings.push(<span key={i}>
                     {meeting}
@@ -175,10 +178,10 @@ class SectionInfoDisplay extends React.Component {
         }
 
         let requirementsDisplay = undefined;
-        if (this.sectionInfo.reqsFilled) {
+        if (this.state.sectionInfo.reqsFilled) {
             const reqs = [];
-            for (let i = 0; i < this.sectionInfo.reqsFilled.length; i++) {
-                let req = this.sectionInfo.reqsFilled[i];
+            for (let i = 0; i < this.state.sectionInfo.reqsFilled.length; i++) {
+                let req = this.state.sectionInfo.reqsFilled[i];
                 reqs.push(<span key={i}>{req}<br/></span>);
             }
             requirementsDisplay = <span> Requirements Fulfilled:
@@ -189,9 +192,9 @@ class SectionInfoDisplay extends React.Component {
         }
 
         let associatedSections = [];
-        if(this.sectionInfo.associatedSections) {
-            for (let i = 0; i < this.sectionInfo.associatedSections.length; i++) {
-                let associatedSection = this.sectionInfo.associatedSections[i];
+        if(this.state.sectionInfo.associatedSections) {
+            for (let i = 0; i < this.state.sectionInfo.associatedSections.length; i++) {
+                let associatedSection = this.state.sectionInfo.associatedSections[i];
                 associatedSections.push(<li
                     key = {i}
                     id={associatedSection.replace(' ', '-').replace(' ', '-')}
@@ -199,31 +202,31 @@ class SectionInfoDisplay extends React.Component {
                         $scope.get.SectionInfo(associatedSections.replace(" ", "-").replace(' ', '-'));
                     }}> {associatedSection} <br/></li>);
             }
-            associatedSections.push(<br key = {this.sectionInfo.associatedSections.length + 1}/>);
+            associatedSections.push(<br key = {this.state.sectionInfo.associatedSections.length + 1}/>);
         }
 
         return <div id="SectionInfo">
-            {this.sectionInfo.fullID && (<p style={{fontSize: "1.25em"}}>
-                {(this.sectionInfo.fullID + "-" + this.sectionInfo.title)}
-                ({(this.sectionInfo.associatedSections !== undefined) &&
+            {this.state.sectionInfo.fullID && (<p style={{fontSize: "1.25em"}}>
+                {(this.state.sectionInfo.fullID + "-" + this.state.sectionInfo.title)}
+                {(this.state.sectionInfo.associatedSections !== undefined) &&
                 <i style={{float: "right", marginRight: "2rem", color: "gold"}}
                    className={"fa fa-star"} onClick={function () {
                     $scope.AddRem(currentSectionDashed)
                 }
-                }/>})
+                }/>}
             </p>)}
             {timeInfoDisplay}
-            {this.sectionInfo.instructor && <p>
-                {'Instructor: ' + sectionInfo.instructor}
+            {this.state.sectionInfo.instructor && <p>
+                {'Instructor: ' + this.state.sectionInfo.instructor}
                 <br/>
                 <br/>
             </p>}
-            {this.sectionInfo.associatedSections && associatedSections}
-            {this.sectionInfo.description && <span>Description: {this.sectionInfo.description} <br/><br/></span>}
+            {this.state.sectionInfo.associatedSections && associatedSections}
+            {this.state.sectionInfo.description && <span>Description: {this.state.sectionInfo.description} <br/><br/></span>}
             {requirementsDisplay}
-            {this.sectionInfo.prereqs && <span> Prerequisites: {this.sectionInfo.prereqs} <br/><br/></span>}
-            {this.sectionInfo.associatedType &&
-            <span> You must also sign up for a {this.sectionInfo.associatedType}. <br/> Associated {this.sectionInfo.associatedType}s: <br/></span>}
+            {this.state.sectionInfo.prereqs && <span> Prerequisites: {this.state.sectionInfo.prereqs} <br/><br/></span>}
+            {this.state.sectionInfo.associatedType &&
+            <span> You must also sign up for a {this.state.sectionInfo.associatedType}. <br/> Associated {this.state.sectionInfo.associatedType}s: <br/></span>}
             <ul>
                 {associatedSections}
             </ul>
