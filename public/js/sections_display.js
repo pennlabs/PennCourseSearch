@@ -111,14 +111,15 @@ var SectionDisplay = function (_React$Component2) {
         value: function getAddRemoveIcon() {
             var className = "fa";
             var $scope = angular.element(document.body).scope();
+            var self = this;
             var schedSections = $scope.schedSections;
             if (schedSections.indexOf(this.section.idDashed) === -1) {
-                className += "fa-plus";
-            } else if (schedSections.indexOf(section.idDashed) > -1) {
-                className += "fa-times";
+                className += " fa-plus";
+            } else if (schedSections.indexOf(this.section.idDashed) > -1) {
+                className += " fa-times";
             }
             var onClick = function onClick() {
-                $scope.sched.addRem(this.section.idDashed);
+                $scope.sched.AddRem(self.section.idDashed);
             };
             return React.createElement("i", { className: className,
                 onClick: onClick });
@@ -150,11 +151,18 @@ var SectionDisplay = function (_React$Component2) {
         key: "render",
         value: function render() {
             var $scope = angular.element(document.body).scope();
+            var className = this.section.actType;
+            if ($scope.currentSection === this.section.idSpaced.replace(' ', '').replace(' ', '')) {
+                className += " activeItem";
+            }
+            if (!$scope.sched.SecOverlap(this.section) && $scope.schedSections.indexOf(this.section.idDashed) === -1) {
+                className += "hideSec";
+            }
             return React.createElement(
                 "li",
                 {
                     id: this.section.idDashed,
-                    className: this.section.actType },
+                    className: className },
                 React.createElement(
                     "div",
                     { className: "columns is-gapless" },
@@ -217,9 +225,9 @@ var SectionList = function (_React$Component3) {
             var $scope = angular.element(document.body).scope();
             var sections = [];
             for (var i = 0; i < this.sections.length; i++) {
-                var _section = this.sections[i];
-                if (($scope.showAct === _section.actType || $scope.showAct === 'noFilter') && (_section.isOpen || $scope.showClosed) && ($scope.currentCourse || $scope.starSections.indexOf(_section.idDashed) > -1)) {
-                    sections.push(React.createElement(SectionDisplay, { section: _section, key: i }));
+                var section = this.sections[i];
+                if (($scope.showAct === section.actType || $scope.showAct === 'noFilter') && (section.isOpen || $scope.showClosed) && ($scope.currentCourse || $scope.starSections.indexOf(section.idDashed) > -1)) {
+                    sections.push(React.createElement(SectionDisplay, { section: section, key: i }));
                 }
             }
 

@@ -60,14 +60,15 @@ class SectionDisplay extends React.Component {
     getAddRemoveIcon() {
         let className = "fa";
         const $scope = angular.element(document.body).scope();
+        const self = this;
         const schedSections = $scope.schedSections;
         if (schedSections.indexOf(this.section.idDashed) === -1) {
-            className += "fa-plus";
-        } else if (schedSections.indexOf(section.idDashed) > -1) {
-            className += "fa-times";
+            className += " fa-plus";
+        } else if (schedSections.indexOf(this.section.idDashed) > -1) {
+            className += " fa-times";
         }
         const onClick = function () {
-            $scope.sched.addRem(this.section.idDashed);
+            $scope.sched.AddRem(self.section.idDashed);
         };
         return <i className={className}
                   onClick={onClick}/>;
@@ -92,9 +93,16 @@ class SectionDisplay extends React.Component {
 
     render() {
         const $scope = angular.element(document.body).scope();
+        let className = this.section.actType;
+        if($scope.currentSection === this.section.idSpaced.replace(' ', '').replace(' ', '')){
+            className += " activeItem";
+        }
+        if((!$scope.sched.SecOverlap(this.section) && $scope.schedSections.indexOf(this.section.idDashed) === -1)){
+            className += "hideSec";
+        }
         return <li
             id={this.section.idDashed}
-            className={this.section.actType}>
+            className={className}>
             <div className={"columns is-gapless"}>
 
                 <div className={"column is-one-fifth"}>
