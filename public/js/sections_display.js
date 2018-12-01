@@ -46,39 +46,39 @@ var Sections = function (_React$Component) {
             sectionsObj = this;
             return React.createElement(
                 "div",
-                { id: "sectionsContainer" },
+                { id: "SectionsContainer" },
                 React.createElement(
                     "div",
-                    { className: "columns is-gapless",
-                        style: { marginBottom: "0.6em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } },
+                    { id: "Sections" },
                     React.createElement(
                         "div",
-                        { className: "tooltip column is-one-fifth", title: "Section status (open or closed)" },
-                        "O/C"
+                        { className: "columns is-gapless",
+                            style: { marginBottom: "0.6em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } },
+                        React.createElement(
+                            "div",
+                            { className: "tooltip column is-one-fifth", title: "Section status (open or closed)" },
+                            "O/C"
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "PCR Inst tooltip column is-one-fifth", title: "Instructor Quality rating",
+                                style: { background: "rgba(46, 204, 113, 0.85)" } },
+                            "Inst"
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "tooltip column is-one-fifth", title: "Section ID" },
+                            "Sect"
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "tooltip column", title: "Meeting Time" },
+                            "Time"
+                        )
                     ),
-                    React.createElement(
-                        "div",
-                        { className: "PCR Inst tooltip column is-one-fifth", title: "Instructor Quality rating",
-                            style: { background: "rgba(46, 204, 113, 0.85)" } },
-                        "Inst"
-                    ),
-                    React.createElement(
-                        "div",
-                        { className: "tooltip column is-one-fifth", title: "Section ID" },
-                        "Sect"
-                    ),
-                    React.createElement(
-                        "div",
-                        { className: "tooltip column", title: "Meeting Time" },
-                        "Time"
-                    )
+                    this.state.sections && React.createElement(SectionList, { key: this.iteration, sections: this.state.sections })
                 ),
-                React.createElement(
-                    "div",
-                    { id: "sections" },
-                    this.state.sections && React.createElement(SectionList, { key: this.iteration, sections: this.state.sections }),
-                    this.state.sectionInfo && React.createElement(SectionInfoDisplay, { key: this.iteration + 1, sectionInfo: this.state.sectionInfo })
-                )
+                this.state.sectionInfo && React.createElement(SectionInfoDisplay, { key: this.iteration + 1, sectionInfo: this.state.sectionInfo })
             );
         }
     }]);
@@ -128,8 +128,9 @@ var SectionDisplay = function (_React$Component2) {
         key: "getPcaButton",
         value: function getPcaButton() {
             var $scope = angular.element(document.body).scope();
+            var self = this;
             var onClick = function onClick() {
-                $scope.registerNotify(this.section.idDashed);
+                $scope.registerNotify(self.section.idDashed);
             };
             return React.createElement("i", { className: "fa fa-bell-o tooltip",
                 onClick: onClick,
@@ -170,9 +171,12 @@ var SectionDisplay = function (_React$Component2) {
                         "div",
                         { className: "column is-one-fifth" },
                         this.getAddRemoveIcon(),
-                        React.createElement("span", { className: "statusClass " + this.section.isOpen ? "openSec" : "closedSec",
-                            onClick: this.openSection }),
-                        !this.section.isOpen && this.getPcaButton()
+                        React.createElement(
+                            "span",
+                            { className: "statusClass " + (this.section.isOpen ? "openSec" : "closedSec"),
+                                onClick: this.openSection },
+                            !this.section.isOpen && this.getPcaButton()
+                        )
                     ),
                     React.createElement(
                         "div",
@@ -255,12 +259,28 @@ var SectionInfoDisplay = function (_React$Component4) {
         var _this4 = _possibleConstructorReturn(this, (SectionInfoDisplay.__proto__ || Object.getPrototypeOf(SectionInfoDisplay)).call(this, props));
 
         _this4.state = { sectionInfo: _this4.props.sectionInfo };
+        _this4.getStar = _this4.getStar.bind(_this4);
         return _this4;
     }
 
     _createClass(SectionInfoDisplay, [{
+        key: "getStar",
+        value: function getStar() {
+            var $scope = angular.element(document.body).scope();
+            var className = "fa fa-star";
+            if ($scope.starSections.indexOf($scope.currentSectionDashed) === -1) {
+                className += "-o";
+            }
+            return React.createElement("i", { style: { float: "right", marginRight: "2rem", color: "gold" },
+                className: className, onClick: function onClick() {
+                    $scope.star.AddRem($scope.currentSectionDashed);
+                } });
+        }
+    }, {
         key: "render",
         value: function render() {
+            var _this5 = this;
+
             console.log("Rendering section info");
             var $scope = angular.element(document.body).scope();
             var timeInfoDisplay = undefined;
@@ -305,22 +325,27 @@ var SectionInfoDisplay = function (_React$Component4) {
             }
 
             var associatedSections = [];
+            var self = this;
             if (this.state.sectionInfo.associatedSections) {
-                for (var _i2 = 0; _i2 < this.state.sectionInfo.associatedSections.length; _i2++) {
-                    var associatedSection = this.state.sectionInfo.associatedSections[_i2];
+                var _loop = function _loop(_i2) {
+                    var associatedSection = _this5.state.sectionInfo.associatedSections[_i2];
                     associatedSections.push(React.createElement(
                         "li",
                         {
                             key: _i2,
                             id: associatedSection.replace(' ', '-').replace(' ', '-'),
                             onClick: function onClick() {
-                                $scope.get.SectionInfo(associatedSections.replace(" ", "-").replace(' ', '-'));
+                                $scope.get.SectionInfo(self.state.sectionInfo.associatedSections[_i2].replace(" ", "-").replace(' ', '-'));
                             } },
                         " ",
                         associatedSection,
                         " ",
                         React.createElement("br", null)
                     ));
+                };
+
+                for (var _i2 = 0; _i2 < this.state.sectionInfo.associatedSections.length; _i2++) {
+                    _loop(_i2);
                 }
                 associatedSections.push(React.createElement("br", { key: this.state.sectionInfo.associatedSections.length + 1 }));
             }
@@ -332,10 +357,7 @@ var SectionInfoDisplay = function (_React$Component4) {
                     "p",
                     { style: { fontSize: "1.25em" } },
                     this.state.sectionInfo.fullID + "-" + this.state.sectionInfo.title,
-                    this.state.sectionInfo.associatedSections !== undefined && React.createElement("i", { style: { float: "right", marginRight: "2rem", color: "gold" },
-                        className: "fa fa-star", onClick: function onClick() {
-                            $scope.AddRem(currentSectionDashed);
-                        } })
+                    this.state.sectionInfo.associatedSections !== undefined && this.getStar()
                 ),
                 timeInfoDisplay,
                 this.state.sectionInfo.instructor && React.createElement(

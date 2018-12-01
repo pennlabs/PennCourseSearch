@@ -23,21 +23,21 @@ class Sections extends React.Component {
     render() {
         this.iteration++;
         sectionsObj = this;
-        return <div id={"sectionsContainer"}>
-            <div className="columns is-gapless"
-                 style={{marginBottom: "0.6em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
-                <div className={"tooltip column is-one-fifth"} title={"Section status (open or closed)"}>O/C</div>
-                <div className={"PCR Inst tooltip column is-one-fifth"} title={"Instructor Quality rating"}
-                     style={{background: "rgba(46, 204, 113, 0.85)"}}>
-                    Inst
+        return <div id={"SectionsContainer"}>
+            <div id={"Sections"}>
+                <div className="columns is-gapless"
+                     style={{marginBottom: "0.6em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
+                    <div className={"tooltip column is-one-fifth"} title={"Section status (open or closed)"}>O/C</div>
+                    <div className={"PCR Inst tooltip column is-one-fifth"} title={"Instructor Quality rating"}
+                         style={{background: "rgba(46, 204, 113, 0.85)"}}>
+                        Inst
+                    </div>
+                    <div className={"tooltip column is-one-fifth"} title={"Section ID"}>Sect</div>
+                    <div className={"tooltip column"} title={"Meeting Time"}>Time</div>
                 </div>
-                <div className={"tooltip column is-one-fifth"} title={"Section ID"}>Sect</div>
-                <div className={"tooltip column"} title={"Meeting Time"}>Time</div>
-            </div>
-            <div id={"sections"}>
                 {this.state.sections && <SectionList key = {this.iteration} sections={this.state.sections}/>}
-                {this.state.sectionInfo && <SectionInfoDisplay key = {this.iteration + 1} sectionInfo={this.state.sectionInfo}/>}
             </div>
+            {this.state.sectionInfo && <SectionInfoDisplay key = {this.iteration + 1} sectionInfo={this.state.sectionInfo}/>}
         </div>;
     }
 
@@ -76,8 +76,9 @@ class SectionDisplay extends React.Component {
 
     getPcaButton() {
         const $scope = angular.element(document.body).scope();
+        const self = this;
         const onClick = function () {
-            $scope.registerNotify(this.section.idDashed);
+            $scope.registerNotify(self.section.idDashed);
         };
         return <i className={"fa fa-bell-o tooltip"}
                   onClick={onClick}
@@ -107,9 +108,10 @@ class SectionDisplay extends React.Component {
 
                 <div className={"column is-one-fifth"}>
                     {this.getAddRemoveIcon()}
-                    <span className={"statusClass " + this.section.isOpen ? "openSec" : "closedSec"}
-                          onClick={this.openSection}/>
-                    {(!this.section.isOpen) && this.getPcaButton()}
+                    <span className={"statusClass " + (this.section.isOpen ? "openSec" : "closedSec")}
+                          onClick={this.openSection}>
+                        {(!this.section.isOpen) && this.getPcaButton()}
+                    </span>
                 </div>
 
                 <div className="column is-one-fifth">
@@ -166,6 +168,20 @@ class SectionInfoDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.state = {sectionInfo: this.props.sectionInfo};
+        this.getStar = this.getStar.bind(this);
+    }
+
+    getStar(){
+        const $scope = angular.element(document.body).scope();
+        let className = "fa fa-star";
+        if($scope.starSections.indexOf($scope.currentSectionDashed) === -1){
+            className += "-o";
+        }
+        return <i style={{float: "right", marginRight: "2rem", color: "gold"}}
+           className={className} onClick={function () {
+            $scope.star.AddRem($scope.currentSectionDashed)
+        }
+        }/>
     }
 
     render() {
@@ -201,6 +217,7 @@ class SectionInfoDisplay extends React.Component {
         }
 
         let associatedSections = [];
+        const self = this;
         if(this.state.sectionInfo.associatedSections) {
             for (let i = 0; i < this.state.sectionInfo.associatedSections.length; i++) {
                 let associatedSection = this.state.sectionInfo.associatedSections[i];
@@ -208,7 +225,7 @@ class SectionInfoDisplay extends React.Component {
                     key = {i}
                     id={associatedSection.replace(' ', '-').replace(' ', '-')}
                     onClick={function () {
-                        $scope.get.SectionInfo(associatedSections.replace(" ", "-").replace(' ', '-'));
+                        $scope.get.SectionInfo(self.state.sectionInfo.associatedSections[i].replace(" ", "-").replace(' ', '-'));
                     }}> {associatedSection} <br/></li>);
             }
             associatedSections.push(<br key = {this.state.sectionInfo.associatedSections.length + 1}/>);
@@ -217,12 +234,7 @@ class SectionInfoDisplay extends React.Component {
         return <div id="SectionInfo">
             {this.state.sectionInfo.fullID && (<p style={{fontSize: "1.25em"}}>
                 {(this.state.sectionInfo.fullID + "-" + this.state.sectionInfo.title)}
-                {(this.state.sectionInfo.associatedSections !== undefined) &&
-                <i style={{float: "right", marginRight: "2rem", color: "gold"}}
-                   className={"fa fa-star"} onClick={function () {
-                    $scope.AddRem(currentSectionDashed)
-                }
-                }/>}
+                {(this.state.sectionInfo.associatedSections !== undefined) && this.getStar()}
             </p>)}
             {timeInfoDisplay}
             {this.state.sectionInfo.instructor && <p>

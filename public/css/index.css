@@ -157,14 +157,23 @@ footer:hover i.fa.fa-angle-up::before{
 #SectionCol {
 	height: calc(100vh - 16em);
 	box-sizing: border-box;
-	list-style-type: none;
-	background-color: white;
-	font-size: 0.75em;
-	text-align: left;
 	border-radius: .375em;
 }
 
+#CourseList,
+#SectionsContainer{
+	list-style-type: none;
+	background-color: white;
+	text-align: left;
+	font-size: 0.75em;
+}
+
+#SectionsContainer{
+	width:100%;
+}
+
 #CourseList {
+	box-sizing: border-box;
 	text-align: left;
 	margin-right: 1em;
 }
@@ -179,6 +188,7 @@ footer:hover i.fa.fa-angle-up::before{
 }
 
 #SectionCol {
+	height: calc(100vh - 12em);
 	border-top-right-radius: .375em;
 }
 
