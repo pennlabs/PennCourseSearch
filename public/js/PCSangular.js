@@ -443,6 +443,7 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
             }
         },
         Render: function (thisschedData) {
+            updateSchedule(thisschedData);
             var courseSched = thisschedData.meetings;
             var weekdays = ['M', 'T', 'W', 'R', 'F'];
             $scope.fullWeekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
