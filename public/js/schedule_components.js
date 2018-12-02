@@ -83,7 +83,7 @@ var SchedGrid = function (_React$Component) {
                 if (courseSched.length) {
                     for (var h = 0; h <= endHour - startHour; h++) {
                         // for each hour
-                        var toppos = h * this.halfScale + 7.5; // each height value is linearly spaced with an offset
+                        var toppos = h * halfScale + 7.5; // each height value is linearly spaced with an offset
                         var hourtext = Math.round(h + startHour); // If startHour is not an integer, make it pretty
                         if (hourtext >= 12) {
                             if (hourtext !== 12) {
@@ -154,8 +154,10 @@ var SchedGrid = function (_React$Component) {
 
             reset_colors();
             meetBlocks.forEach(function (b) {
-                schedBlocks[b] = AddSchedAttr(b);
+                schedBlocks.push(AddSchedAttr(b));
             });
+
+            console.log(schedBlocks);
 
             function TwoOverlap(block1, block2) {
                 // Thank you to Stack Overflow user BC. for the function this is based on.
@@ -228,14 +230,13 @@ var SchedGrid = function (_React$Component) {
                 );
             } else {
                 var _weekdays = [];
-                var $scope = angular.element(document.body).scope();
-                var weekdayNames = $scope.fullWeekdays;
+                var weekdayNames = fullWeekdays;
                 for (var _i = 0; _i < weekdayNames.length; _i++) {
                     var weekday = weekdayNames[_i];
                     var label = React.createElement(
                         'div',
                         { key: _i, className: 'DayName',
-                            style: { width: $scope.percentWidth + "%" } },
+                            style: { width: percentWidth + "%" } },
                         weekday
                     );
                     _weekdays.push(label);

@@ -65,7 +65,7 @@ class SchedGrid extends React.Component {
             if (courseSched.length) {
                 for (let h = 0; h <= endHour - startHour; h++) {
                     // for each hour
-                    let toppos = h * this.halfScale + 7.5; // each height value is linearly spaced with an offset
+                    let toppos = h * halfScale + 7.5; // each height value is linearly spaced with an offset
                     let hourtext = Math.round(h + startHour); // If startHour is not an integer, make it pretty
                     if (hourtext >= 12) {
                         if (hourtext !== 12) {
@@ -136,8 +136,11 @@ class SchedGrid extends React.Component {
 
         reset_colors();
         meetBlocks.forEach(function (b) {
-            schedBlocks[b] = AddSchedAttr(b);
+            schedBlocks.push(AddSchedAttr(b));
         });
+
+        console.log(schedBlocks);
+
 
 
 
@@ -210,12 +213,11 @@ class SchedGrid extends React.Component {
             </div>
         } else {
             let weekdays = [];
-            let $scope = angular.element(document.body).scope();
-            const weekdayNames = $scope.fullWeekdays;
+            const weekdayNames = fullWeekdays;
             for (let i = 0; i < weekdayNames.length; i++) {
                 var weekday = weekdayNames[i];
                 let label = <div key={i} className="DayName"
-                                 style={{width: $scope.percentWidth + "%"}}>
+                                 style={{width: percentWidth + "%"}}>
                     {weekday}
                 </div>;
                 weekdays.push(label);

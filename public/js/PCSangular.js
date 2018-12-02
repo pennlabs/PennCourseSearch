@@ -572,6 +572,7 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
         },
         CrossCheck: function (asscarray) {
             var filt = asscarray.filter(function (n) {
+                return true;
                 return $scope.schedSections.indexOf(n) !== -1;
             });
             return (filt.length || !asscarray.length);
