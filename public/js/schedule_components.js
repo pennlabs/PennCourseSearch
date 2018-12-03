@@ -180,9 +180,15 @@ var SchedGrid = function (_React$Component) {
                 }
             }
 
+            var newSchedBlocks = [];
             weekdays.forEach(function (weekday) {
-                var dayblocks = schedBlocks.filter(function (n) {
-                    return n.letterday === weekday;
+                var dayblocks = [];
+                schedBlocks.forEach(function (n) {
+                    if (n.letterday.indexOf(weekday) !== -1) {
+                        var newObj = JSON.parse(JSON.stringify(n));
+                        n.letterday = weekday;
+                        dayblocks.push(newObj);
+                    }
                 });
                 for (var i = 0; i < dayblocks.length - 1; i++) {
                     for (var j = i + 1; j < dayblocks.length; j++) {
@@ -193,11 +199,11 @@ var SchedGrid = function (_React$Component) {
                         }
                     }
                 }
-                schedBlocks.filter(function (n) {
-                    return n.letterday !== weekdays[weekday];
-                });
-                schedBlocks.concat(dayblocks);
+                newSchedBlocks = newSchedBlocks.concat(dayblocks);
             });
+
+            schedBlocks = newSchedBlocks;
+            console.log(schedBlocks);
 
             var blocks = [];
             for (var i = 0; i < schedBlocks.length; i++) {

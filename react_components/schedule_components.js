@@ -169,9 +169,15 @@ class SchedGrid extends React.Component {
             }
         }
 
+        let newSchedBlocks = [];
         weekdays.forEach(function (weekday) {
-            var dayblocks = schedBlocks.filter(function (n) {
-                return n.letterday === weekday;
+            let dayblocks = [];
+            schedBlocks.forEach(function(n){
+                if(n.letterday.indexOf(weekday) !== -1){
+                    let newObj = JSON.parse(JSON.stringify(n));
+                    n.letterday = weekday;
+                    dayblocks.push(newObj);
+                }
             });
             for (var i = 0; i < dayblocks.length - 1; i++) {
                 for (var j = i + 1; j < dayblocks.length; j++) {
@@ -182,11 +188,11 @@ class SchedGrid extends React.Component {
                     }
                 }
             }
-            schedBlocks.filter(function (n) {
-                return n.letterday !== weekdays[weekday];
-            });
-            schedBlocks.concat(dayblocks);
+            newSchedBlocks = newSchedBlocks.concat(dayblocks);
         });
+
+        schedBlocks = newSchedBlocks;
+        console.log(schedBlocks);
 
 
 
