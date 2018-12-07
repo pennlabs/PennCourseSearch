@@ -135,11 +135,12 @@ class SchedGrid extends React.Component {
         }
 
         reset_colors();
+
         meetBlocks.forEach(function (b) {
-            schedBlocks.push(AddSchedAttr(b));
+            schedBlocks.push(b);
         });
 
-        console.log(schedBlocks);
+
 
 
 
@@ -175,8 +176,9 @@ class SchedGrid extends React.Component {
             schedBlocks.forEach(function(n){
                 if(n.letterday.indexOf(weekday) !== -1){
                     let newObj = JSON.parse(JSON.stringify(n));
-                    n.letterday = weekday;
-                    dayblocks.push(newObj);
+                    console.log(newObj);
+                    newObj.letterday = weekday;
+                    dayblocks.push(AddSchedAttr(newObj));
                 }
             });
             for (var i = 0; i < dayblocks.length - 1; i++) {
@@ -192,7 +194,6 @@ class SchedGrid extends React.Component {
         });
 
         schedBlocks = newSchedBlocks;
-        console.log(schedBlocks);
 
 
 

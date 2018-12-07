@@ -153,11 +153,10 @@ var SchedGrid = function (_React$Component) {
             }
 
             reset_colors();
-            meetBlocks.forEach(function (b) {
-                schedBlocks.push(AddSchedAttr(b));
-            });
 
-            console.log(schedBlocks);
+            meetBlocks.forEach(function (b) {
+                schedBlocks.push(b);
+            });
 
             function TwoOverlap(block1, block2) {
                 // Thank you to Stack Overflow user BC. for the function this is based on.
@@ -186,8 +185,9 @@ var SchedGrid = function (_React$Component) {
                 schedBlocks.forEach(function (n) {
                     if (n.letterday.indexOf(weekday) !== -1) {
                         var newObj = JSON.parse(JSON.stringify(n));
-                        n.letterday = weekday;
-                        dayblocks.push(newObj);
+                        console.log(newObj);
+                        newObj.letterday = weekday;
+                        dayblocks.push(AddSchedAttr(newObj));
                     }
                 });
                 for (var i = 0; i < dayblocks.length - 1; i++) {
@@ -203,7 +203,6 @@ var SchedGrid = function (_React$Component) {
             });
 
             schedBlocks = newSchedBlocks;
-            console.log(schedBlocks);
 
             var blocks = [];
             for (var i = 0; i < schedBlocks.length; i++) {
