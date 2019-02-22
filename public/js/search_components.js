@@ -28,7 +28,6 @@ var SearchResults = function (_React$Component) {
     _createClass(SearchResults, [{
         key: "render",
         value: function render() {
-            console.log("Re-rendering");
             var items = [];
             var $scope = angular.element(document.body).scope();
             for (var i = 0; i < this.state.searchResults.length; i++) {
@@ -75,7 +74,6 @@ var SearchResults = function (_React$Component) {
                         })
                     };
                 });
-                console.log(this.state.searchResults);
             } else {
                 this.setState(function (state) {
                     return {
@@ -84,7 +82,6 @@ var SearchResults = function (_React$Component) {
                         })
                     };
                 });
-                console.log(this.state.searchResults);
             }
         }
     }]);

@@ -13,7 +13,6 @@ class SearchResults extends React.Component{
     }
 
     render(){
-        console.log("Re-rendering");
         let items = [];
         const $scope = angular.element(document.body).scope();
         for(let i = 0; i < this.state.searchResults.length; i++){
@@ -56,14 +55,12 @@ class SearchResults extends React.Component{
                     }
                 })
             }));
-            console.log(this.state.searchResults);
         }else{
             this.setState(state => ({
                 searchResults: new_results.sort((a, b) => {
                     return scale * (a.revs[courseSort] - b.revs[courseSort])
                 })
             }));
-            console.log(this.state.searchResults);
         }
     }
 

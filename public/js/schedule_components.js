@@ -185,7 +185,6 @@ var SchedGrid = function (_React$Component) {
                 schedBlocks.forEach(function (n) {
                     if (n.letterday.indexOf(weekday) !== -1) {
                         var newObj = JSON.parse(JSON.stringify(n));
-                        console.log(newObj);
                         newObj.letterday = weekday;
                         dayblocks.push(AddSchedAttr(newObj));
                     }

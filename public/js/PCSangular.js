@@ -66,7 +66,6 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
         // ga('send', 'event', 'UI interaction', 'searchChange', $scope.searchType);        
         $scope.currentDept = '';
         // $scope.courses = [];
-        console.log($scope.search);
         $scope.initiateSearch($scope.search);
         $scope.searchPlaceholder = placeholderMap[$scope.searchType];
     };
@@ -213,7 +212,6 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
 
     $scope.star = {
         AddRem: function (secID) {
-            console.log(secID);
             addrem(secID, $scope.starSections);
             this.Title();
         },
@@ -258,7 +256,6 @@ PCS.controller('CourseController', function ($scope, $http, localStorageService,
     $scope.sched = {
         AddRem: function (secID, schedname, needloc) {
             secID = FormatID(secID).join('-');
-            console.log(secID);
 
             // schedSections is a continually updated array of sections in the current schedule
             if ($scope.schedSections.indexOf(secID) === -1) { // If the requested section is not scheduled

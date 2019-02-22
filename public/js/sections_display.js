@@ -27,6 +27,7 @@ var Sections = function (_React$Component) {
         key: "updateSections",
         value: function updateSections() {
             var $scope = angular.element(document.body).scope();
+            console.log(JSON.stringify($scope.sections));
             this.setState(function (state) {
                 return { sections: $scope.sections };
             });
@@ -35,6 +36,7 @@ var Sections = function (_React$Component) {
         key: "updateSectionInfo",
         value: function updateSectionInfo() {
             var $scope = angular.element(document.body).scope();
+            console.log(JSON.stringify($scope.sectionInfo));
             this.setState(function (state) {
                 return { sectionInfo: $scope.sectionInfo };
             });
@@ -281,7 +283,6 @@ var SectionInfoDisplay = function (_React$Component4) {
         value: function render() {
             var _this5 = this;
 
-            console.log("Rendering section info");
             var $scope = angular.element(document.body).scope();
             var timeInfoDisplay = undefined;
             if (this.state.sectionInfo.timeInfo) {

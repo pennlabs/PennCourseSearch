@@ -12,11 +12,13 @@ class Sections extends React.Component {
 
     updateSections() {
         const $scope = angular.element(document.body).scope();
+        console.log(JSON.stringify($scope.sections));
         this.setState(state => ({sections: $scope.sections}));
     }
 
     updateSectionInfo() {
         const $scope = angular.element(document.body).scope();
+        console.log(JSON.stringify($scope.sectionInfo));
         this.setState(state => ({sectionInfo: $scope.sectionInfo}));
     }
 
@@ -185,7 +187,6 @@ class SectionInfoDisplay extends React.Component {
     }
 
     render() {
-        console.log("Rendering section info");
         const $scope = angular.element(document.body).scope();
         let timeInfoDisplay = undefined;
         if (this.state.sectionInfo.timeInfo) {
